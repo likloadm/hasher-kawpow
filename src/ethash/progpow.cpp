@@ -10,7 +10,7 @@
 #include "ethash/kiss99.hpp"
 #include <include/keccak.hpp>
 #include <helpers.hpp>
-
+#include <iostream>
 #include <array>
 
 namespace progpow
@@ -482,6 +482,7 @@ bool light_verify(const char* str_header_hash,
                   const char* height_str, const char* share_boundary_str,
                   const char* block_boundary_str) noexcept
 {
+    static int epoch_number = 0;
     static epoch_context_ptr context_light{nullptr, nullptr};
 
     auto header_hash = to_hash256(str_header_hash);
