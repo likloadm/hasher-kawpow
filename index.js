@@ -61,6 +61,10 @@ function verify(headerHashBuf, nonceBuf, blockHeight, mixHashBuf, hashOutBuf) {
     return kawpow.verify(headerHashBuf, nonceBuf, blockHeight, mixHashBuf, hashOutBuf);
 }
 
+function light_verify(str_header_hash, str_mix_hash, str_nonce, str_boundary, str_final) {
+    return kawpow.light_verify(str_header_hash, str_mix_hash, str_nonce, str_boundary, str_final);
+}
+
 
 function _expectBuffer(buffer, name, size) {
     if (!Buffer.isBuffer(buffer))
