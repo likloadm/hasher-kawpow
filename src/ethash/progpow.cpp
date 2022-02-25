@@ -505,7 +505,7 @@ bool light_verify(const epoch_context& context, const char* str_header_hash,
 
     // Check epoch number and context
 
-    const auto result = hash(*context, (int) nHeight, header_hash, nNonce);
+    const auto result = hash(context, (int) nHeight, header_hash, nNonce);
     std::string share_met = "false";
     std::string block_met = "false";
     std::string mix_match = "false";
