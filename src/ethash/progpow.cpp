@@ -477,63 +477,55 @@ bool verify(const epoch_context& context, int block_number, const hash256& heade
 }
 
 bool light_verify(const char* str_header_hash,
-                  const char* str_mix_hash, const char* str_nonce, const char* str_boundary, char* str_final) noexcept
+                  const char* str_mix_hash, const char* str_nonce,
+                  const char* height_str, const char* share_boundary_str,
+                  const char* block_boundary_str) noexcept
 {
+    static epoch_context_ptr context_light{nullptr, nullptr};
 
-    hash256 header_hash = to_hash256(str_header_hash);
-    hash256 mix_hash = to_hash256(str_mix_hash);
-    hash256 boundary = to_hash256(str_boundary);
+    auto header_hash = to_hash256(header_hash_str);
+    auto mix_hash = to_hash256(mix_hash_str);
+    auto share_boundary = to_hash256(share_boundary_str);
+    auto block_boundary = to_hash256(block_boundary_str);
 
-    uint64_t nonce = std::stoull(str_nonce, nullptr, 16);
+    // Convert nonce from string
+    uint64_t nNonce;
+    errno = 0;
+    char *endp = nullptr;
+    errno = 0; // strtoull will not set errno if valid
+    unsigned long long int n = strtoull(str_nonce, &endp, 16);
+    nNonce = (uint64_t) n;
 
-    uint32_t state2[8];
+    // Convert height from string
+    uint32_t nHeight;
+    errno = 0;
+    endp = nullptr;
+    errno = 0; // strtoul will not set errno if valid
+    unsigned long int nH = strtoul(height_str, &endp, 10);
+    nHeight = (uint32_t) nH;
 
-    {
-        // Absorb phase for initial round of keccak
-        // 1st fill with header data (8 words)
-        uint32_t state[25];     // Keccak's state
-        for (int i = 0; i < 8; i++)
-            state[i] = header_hash.word32s[i];
-        // 2nd fill with nonce (2 words)
-        state[8] = (uint32_t)nonce;
-        state[9] = (uint32_t)(nonce >> 32);
-        // 3rd all remaining elements to zero
-        for (int i = 10; i < 25; i++)
-            state[i] = 0;
-
-        keccak_progpow_64(state);
-
-        for (int i = 0; i < 8; i++)
-            state2[i] = state[i];
+    // Check epoch number and context
+    epoch_number = (int) nHeight / 7500;
+    if (!context_light || context_light->epoch_number != epoch_number) {
+        context_light = create_epoch_context(epoch_number);
+        std::cout << "Building new context for epoch: " << epoch_number << std::endl;
     }
 
-    uint32_t state[25];     // Keccak's state
-    for (int i = 0; i < 8; i++)
-        state[i] = state2[i];
+    const auto result = hash(*context_light, (int) nHeight, header_hash, nNonce);
+    std::string share_met = "false";
+    std::string block_met = "false";
+    std::string mix_match = "false";
+    if (result.mix_hash == mix_hash) {
+        mix_match = "true";
+    }
 
-    // Absorb phase for last round of keccak (256 bits)
-    // 1st initial 8 words of state are kept as carry-over from initial keccak
-    // 2nd subsequent 8 words are carried from digest/mix
-    for (int i = 8; i < 16; i++)
-        state[i] = mix_hash.word32s[i-8];
+    if (ethash::is_less_or_equal(result.final_hash, share_boundary)) {
+        share_met = "true";
+    }
 
-    // 3rd all other elements to zero
-    for (int i = 16; i < 25; i++)
-        state[i] = 0;
-
-    // Run keccak loop
-    keccak_progpow_256(state);
-
-    hash256 output;
-    for (int i = 0; i < 8; ++i)
-        output.word32s[i] = le::uint32(state[i]);
-    if (!is_less_or_equal(output, boundary))
-        return false;
-
-    if (!is_less_or_equal(output, boundary))
-        return false;
-
-    memcpy(str_final,&to_hex(output)[0],64);
+    if (ethash::is_less_or_equal(result.final_hash, block_boundary)) {
+        block_met = "true";
+    }
     return true;
 }
 

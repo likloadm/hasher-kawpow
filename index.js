@@ -61,8 +61,8 @@ function verify(headerHashBuf, nonceBuf, blockHeight, mixHashBuf, hashOutBuf) {
     return kawpow.verify(headerHashBuf, nonceBuf, blockHeight, mixHashBuf, hashOutBuf);
 }
 
-function light_verify(str_header_hash, str_mix_hash, str_nonce, str_boundary, str_final) {
-    return kawpow.light_verify(str_header_hash, str_mix_hash, str_nonce, str_boundary, str_final);
+function light_verify(str_header_hash, str_mix_hash, str_nonce, height_str, share_boundary_str, block_boundary_str) {
+    return kawpow.light_verify(str_header_hash, str_mix_hash, str_nonce, height_str, share_boundary_str, block_boundary_str);
 }
 
 
