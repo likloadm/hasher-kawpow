@@ -15,6 +15,10 @@ using namespace v8;
 
 #define THROW_ERROR_EXCEPTION(x) Nan::ThrowError(x)
 
+const char* ToCString(const String::Utf8Value& value) {
+  return *value ? *value : "<string conversion failed>";
+}
+
 
 NAN_METHOD(hash_one) {
 
@@ -67,15 +71,34 @@ NAN_METHOD(verify) {
 }
 
 NAN_METHOD(light_verify) {
-
         if (info.Length() < 5)
             return THROW_ERROR_EXCEPTION("hasher-kawpow.light_verify - 5 arguments expected.");
-        Local<Object> header_hash_ptr = Nan::To<Object>(info[0]).ToLocalChecked();
-        Local<Object> mix_out_ptr = Nan::To<Object>(info[1]).ToLocalChecked();
-        Local<Object> nonce64_ptr = Nan::To<Object>(info[2]).ToLocalChecked();
+        Local<Function> cb = Local<Function>::Cast(info[0]);
+        String::Utf8Value str(info[0]);
+        const char* header_hash_ptr = ToCString(str);
+
+        Local<Function> cb = Local<Function>::Cast(info[1]);
+        String::Utf8Value str(info[1]);
+        const char* mix_out_ptr = ToCString(str);
+
+        Local<Function> cb = Local<Function>::Cast(info[2]);
+        String::Utf8Value str(info[2]);
+        const char* nonce64_ptr = ToCString(str);
+
         int block_height = info[3]->IntegerValue(Nan::GetCurrentContext()).FromJust();
-        Local<Object> share_boundary_str = Nan::To<Object>(info[4]).ToLocalChecked();
-        Local<Object> block_boundary_str = Nan::To<Object>(info[5]).ToLocalChecked();
+
+        Local<Function> cb = Local<Function>::Cast(info[4]);
+        String::Utf8Value str(info[4]);
+        const char* share_boundary_str = ToCString(str);
+
+        Local<Function> cb = Local<Function>::Cast(info[5]);
+        String::Utf8Value str(info[5]);
+        const char* block_boundary_str = ToCString(str);
+
+         Local<Function> cb = Local<Function>::Cast(info[3]);
+        String::Utf8Value str(info[3]);
+        const char* block_height_str = ToCString(str);
+
 
         static ethash::epoch_context_ptr context{nullptr, nullptr};
 
@@ -84,7 +107,7 @@ NAN_METHOD(light_verify) {
         if (!context || context->epoch_number != epoch_number)
             context = ethash::create_epoch_context(epoch_number);
 
-        bool is_valid = progpow::light_verify(*context, header_hash_ptr, mix_out_ptr, nonce64_ptr, block_height,
+        bool is_valid = progpow::light_verify(*context, header_hash_ptr, mix_out_ptr, nonce64_ptr, block_height_str,
                                                 share_boundary_str, block_boundary_str);
 
         if (is_valid) {
