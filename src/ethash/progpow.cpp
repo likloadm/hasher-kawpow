@@ -9,6 +9,7 @@
 #include "ethash/ethash-internal.hpp"
 #include "ethash/kiss99.hpp"
 #include <include/keccak.hpp>
+#include <helpers.hpp>
 
 #include <array>
 
@@ -483,8 +484,8 @@ bool light_verify(const char* str_header_hash,
 {
     static epoch_context_ptr context_light{nullptr, nullptr};
 
-    auto header_hash = to_hash256(header_hash_str);
-    auto mix_hash = to_hash256(mix_hash_str);
+    auto header_hash = to_hash256(str_header_hash);
+    auto mix_hash = to_hash256(str_mix_hash);
     auto share_boundary = to_hash256(share_boundary_str);
     auto block_boundary = to_hash256(block_boundary_str);
 
