@@ -71,12 +71,12 @@ NAN_METHOD(light_verify) {
         if (info.Length() < 5)
             return THROW_ERROR_EXCEPTION("hasher-kawpow.light_verify - 5 arguments expected.");
 
-        const char header_hash_ptr = info[0];
-        const char mix_out_ptr = info[1];
-        const char nonce64_ptr = info[2];
+        const char header_hash_ptr = info[0]->ToString(Nan::GetCurrentContext()).FromJust();
+        const char mix_out_ptr = info[1]->ToString(Nan::GetCurrentContext()).FromJust();
+        const char nonce64_ptr = info[2]->ToString(Nan::GetCurrentContext()).FromJust();
         int block_height = info[3]->IntegerValue(Nan::GetCurrentContext()).FromJust();
-        const char share_boundary_str = info[4];
-        const char block_boundary_str = info[5];
+        const char share_boundary_str = info[4]->ToString(Nan::GetCurrentContext()).FromJust();
+        const char block_boundary_str = info[5]->ToString(Nan::GetCurrentContext()).FromJust();
 
         static ethash::epoch_context_ptr context{nullptr, nullptr};
 
