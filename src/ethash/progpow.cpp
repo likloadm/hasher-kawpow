@@ -351,7 +351,7 @@ void hash_one(const epoch_context& context, int block_number, const hash256 *hea
 }
 
 bool verify(const epoch_context& context, int block_number, const hash256 *header_hash,
-    const hash256 &mix_hash, uint64_t nonce, hash256 *hash_out, hash256 *share_out) noexcept
+    const hash256 &mix_hash, uint64_t nonce, hash256 *hash_out) noexcept
 {
 
     uint32_t hash_seed[2];  // KISS99 initiator
@@ -401,9 +401,6 @@ bool verify(const epoch_context& context, int block_number, const hash256 *heade
 
     // Run keccak loop
     keccak_progpow_256(state);
-
-    for (int i = 0; i < 8; ++i)
-        hash_out->word32s[i] = le::uint32(state[i]);
 
     for (int i = 0; i < 8; ++i)
         hash_out->word32s[i] = le::uint32(state[i]);

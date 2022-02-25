@@ -1,5 +1,5 @@
 {
-  "name": "@mintpond/hasher-kawpow",
+  "name": "hasher-kawpow",
   "version": "1.0.0",
   "description": "KawPOW algorithm hashing and verification functions for NodeJS.",
   "main": "index.js",
