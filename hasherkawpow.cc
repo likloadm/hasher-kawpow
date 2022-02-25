@@ -77,27 +77,27 @@ NAN_METHOD(light_verify) {
         String::Utf8Value str(info[0]);
         const char* header_hash_ptr = ToCString(str);
 
-        Local<Function> cb = Local<Function>::Cast(info[1]);
-        String::Utf8Value str(info[1]);
-        const char* mix_out_ptr = ToCString(str);
+        Local<Function> cb1 = Local<Function>::Cast(info[1]);
+        String::Utf8Value str1(info[1]);
+        const char* mix_out_ptr = ToCString(str1);
 
-        Local<Function> cb = Local<Function>::Cast(info[2]);
-        String::Utf8Value str(info[2]);
-        const char* nonce64_ptr = ToCString(str);
+        Local<Function> cb2 = Local<Function>::Cast(info[2]);
+        String::Utf8Value str2(info[2]);
+        const char* nonce64_ptr = ToCString(str2);
 
         int block_height = info[3]->IntegerValue(Nan::GetCurrentContext()).FromJust();
 
-        Local<Function> cb = Local<Function>::Cast(info[4]);
-        String::Utf8Value str(info[4]);
-        const char* share_boundary_str = ToCString(str);
+        Local<Function> cb4 = Local<Function>::Cast(info[4]);
+        String::Utf8Value str4(info[4]);
+        const char* share_boundary_str = ToCString(str4);
 
-        Local<Function> cb = Local<Function>::Cast(info[5]);
-        String::Utf8Value str(info[5]);
-        const char* block_boundary_str = ToCString(str);
+        Local<Function> cb5 = Local<Function>::Cast(info[5]);
+        String::Utf8Value str5(info[5]);
+        const char* block_boundary_str = ToCString(str5);
 
-         Local<Function> cb = Local<Function>::Cast(info[3]);
-        String::Utf8Value str(info[3]);
-        const char* block_height_str = ToCString(str);
+         Local<Function> cb3 = Local<Function>::Cast(info[3]);
+        String::Utf8Value str3(info[3]);
+        const char* block_height_str = ToCString(str3);
 
 
         static ethash::epoch_context_ptr context{nullptr, nullptr};
