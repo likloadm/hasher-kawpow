@@ -66,9 +66,40 @@ NAN_METHOD(verify) {
         }
 }
 
+NAN_METHOD(light_verify) {
+
+        if (info.Length() < 5)
+            return THROW_ERROR_EXCEPTION("hasher-kawpow.light_verify - 5 arguments expected.");
+
+        const char header_hash_ptr = info[0];
+        const char mix_out_ptr = info[1];
+        const char nonce64_ptr = info[2];
+        int block_height = info[3]->IntegerValue(Nan::GetCurrentContext()).FromJust();
+        const char share_boundary_str = info[4];
+        const char block_boundary_str = info[5];
+
+        static ethash::epoch_context_ptr context{nullptr, nullptr};
+
+        const auto epoch_number = ethash::get_epoch_number(block_height);
+
+        if (!context || context->epoch_number != epoch_number)
+            context = ethash::create_epoch_context(epoch_number);
+
+        bool is_valid = progpow::light_verify(*context, header_hash_ptr, mix_out_ptr, nonce64_ptr, block_height,
+                                                share_boundary_str, block_boundary_str);
+
+        if (is_valid) {
+           info.GetReturnValue().Set(Nan::True());
+        }
+        else {
+           info.GetReturnValue().Set(Nan::False());
+        }
+}
+
 NAN_MODULE_INIT(init) {
         Nan::Set(target, Nan::New("hash_one").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(hash_one)).ToLocalChecked());
         Nan::Set(target, Nan::New("verify").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(verify)).ToLocalChecked());
+        Nan::Set(target, Nan::New("light_verify").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(light_verify)).ToLocalChecked());
 }
 
 NODE_MODULE(hashermtp, init)
