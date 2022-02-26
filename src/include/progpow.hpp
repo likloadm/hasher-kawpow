@@ -35,6 +35,6 @@ bool verify(const epoch_context& context, int block_number, const hash256 *heade
 bool light_verify(const epoch_context& context, const char* str_header_hash,
                   const char* str_mix_hash, const char* str_nonce,
                   const char* height_str, const char* share_boundary_str,
-                  const char* block_boundary_str);
+                  const char* block_boundary_str) noexcept;
 
 }  // namespace progpow
