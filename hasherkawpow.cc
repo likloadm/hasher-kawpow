@@ -109,7 +109,7 @@ NAN_METHOD(light_verify) {
         if (!context || context->epoch_number != epoch_number)
             context = ethash::create_epoch_context(epoch_number);
 
-        bool is_valid = progpow::light_verify(*context, header_hash_ptr,
+        progpow::light_verify(*context, header_hash_ptr,
                                               mix_out_ptr, nonce64_ptr, block_height_str,
                                               share_boundary_str, block_boundary_str
                                               share_met, block_met, mix_match);
