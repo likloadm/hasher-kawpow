@@ -477,7 +477,7 @@ bool verify(const epoch_context& context, int block_number, const hash256& heade
     return is_equal(expected_mix_hash, mix_hash);
 }
 
-string light_verify(const epoch_context& context, const char* str_header_hash,
+std::string light_verify(const epoch_context& context, const char* str_header_hash,
                   const char* str_mix_hash, const char* str_nonce,
                   const char* height_str, const char* share_boundary_str,
                   const char* block_boundary_str) noexcept
