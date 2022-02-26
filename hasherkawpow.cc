@@ -111,7 +111,7 @@ NAN_METHOD(light_verify) {
 
         progpow::light_verify(*context, header_hash_ptr,
                                               mix_out_ptr, nonce64_ptr, block_height_str,
-                                              share_boundary_str, block_boundary_str
+                                              share_boundary_str, block_boundary_str,
                                               share_met, block_met, mix_match);
         bool ResultData[3];
         ResultData[0] = share_met;
