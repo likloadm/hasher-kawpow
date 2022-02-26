@@ -117,7 +117,13 @@ NAN_METHOD(light_verify) {
         ResultData[0] = share_met;
         ResultData[1] = block_met;
         ResultData[2] = mix_match;
-        info.GetReturnValue().Set(Nan::New<v8::Array>(ResultData));
+
+        Nan::Local<Array> arr = Array::New();
+        arr->Set(0, Nan::Boolean::New(share_met));
+        arr->Set(1, Nan::Boolean::New(block_met));
+        arr->Set(2, Nan::Boolean::New(mix_match));
+
+        info.GetReturnValue().Set(arr);
 }
 
 NAN_MODULE_INIT(init) {
