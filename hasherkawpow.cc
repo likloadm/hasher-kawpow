@@ -110,18 +110,18 @@ NAN_METHOD(light_verify) {
             context = ethash::create_epoch_context(epoch_number);
 
         progpow::light_verify(*context, header_hash_ptr,
-                                              mix_out_ptr, nonce64_ptr, block_height_str,
-                                              share_boundary_str, block_boundary_str,
-                                              share_met, block_met, mix_match);
+                              mix_out_ptr, nonce64_ptr, block_height_str,
+                              share_boundary_str, block_boundary_str,
+                              share_met, block_met, mix_match);
         bool ResultData[3];
         ResultData[0] = share_met;
         ResultData[1] = block_met;
         ResultData[2] = mix_match;
 
         Nan::Local<Array> arr = Array::New();
-        arr->Set(0, Boolean::New(share_met));
-        arr->Set(1, Boolean::New(block_met));
-        arr->Set(2, Boolean::New(mix_match));
+        arr->Set(0, v8::Boolean::New(share_met));
+        arr->Set(1, v8::Boolean::New(block_met));
+        arr->Set(2, v8::Boolean::New(mix_match));
 
         info.GetReturnValue().Set(arr);
 }
