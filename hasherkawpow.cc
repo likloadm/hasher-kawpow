@@ -21,7 +21,6 @@ const char* ToCString(const String::Utf8Value& value) {
 
 
 NAN_METHOD(hash_one) {
-
         if (info.Length() < 3)
             return THROW_ERROR_EXCEPTION("hasher-kawpow.hash_one - 3 arguments expected.");
 
@@ -43,7 +42,6 @@ NAN_METHOD(hash_one) {
 
 
 NAN_METHOD(verify) {
-
         if (info.Length() < 5)
             return THROW_ERROR_EXCEPTION("hasher-kawpow.verify - 5 arguments expected.");
 
