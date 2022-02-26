@@ -49,16 +49,10 @@ function hashOne(headerHashBuf, nonceBuf, blockHeight, mixOutBuf, hashOutBuf) {
 }
 
 
-function verify(headerHashBuf, nonceBuf, blockHeight, mixHashBuf, hashOutBuf) {
+function verify(str_header_hash, str_mix_hash, str_nonce, height_str, share_boundary_str, block_boundary_str) {
 
-    _expectBuffer(headerHashBuf, 'headerHashBuf', 32);
-    _expectBuffer(nonceBuf, 'nonceBuf', 8);
-    _expectInteger(blockHeight, 'blockHeight');
-    _expectBuffer(mixHashBuf, 'mixOutBuf', 32);
-    _expectBuffer(hashOutBuf, 'hashOutBuf', 32);
-//    _expectBuffer(shareOutBuf, 'shareOutBuf', 32);
-
-    return kawpow.verify(headerHashBuf, nonceBuf, blockHeight, mixHashBuf, hashOutBuf);
+    _expectInteger(height_str, 'height_str');
+    return kawpow.light_verify(str_header_hash, str_mix_hash, str_nonce, height_str, share_boundary_str, block_boundary_str);
 }
 
 function light_verify(str_header_hash, str_mix_hash, str_nonce, height_str, share_boundary_str, block_boundary_str) {
