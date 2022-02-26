@@ -109,7 +109,7 @@ NAN_METHOD(light_verify) {
                               mix_out_ptr, nonce64_ptr, block_height_str,
                               share_boundary_str, block_boundary_str);
 
-        info.GetReturnValue().Set(Nan::New<v8::StringObject>(Nan::New(result).ToLocalChecked())););
+        info.GetReturnValue().Set(Nan::New<v8::StringObject>(Nan::New(result).ToLocalChecked()));
 }
 
 NAN_MODULE_INIT(init) {
