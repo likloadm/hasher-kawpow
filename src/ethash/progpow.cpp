@@ -520,7 +520,7 @@ std::string light_verify(const epoch_context& context, const char* str_header_ha
     if (ethash::is_less_or_equal(result.final_hash, block_boundary)) {
         block_met = "true";
     }
-    return mix_match + " " + share_met + " " + block_met;
+    return mix_match + " " + share_met + " " + block_met + " " + to_hex(result.final_hash);
 }
 
 search_result search_light(const epoch_context& context, int block_number,
