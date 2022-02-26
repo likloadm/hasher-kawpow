@@ -477,10 +477,11 @@ bool verify(const epoch_context& context, int block_number, const hash256& heade
     return is_equal(expected_mix_hash, mix_hash);
 }
 
-bool light_verify(const epoch_context& context, const char* str_header_hash,
+void light_verify(const epoch_context& context, const char* str_header_hash,
                   const char* str_mix_hash, const char* str_nonce,
                   const char* height_str, const char* share_boundary_str,
-                  const char* block_boundary_str) noexcept
+                  const char* block_boundary_str,
+                  bool& share_met, bool& block_met, bool& mix_match) noexcept
 {
     auto header_hash = to_hash256(str_header_hash);
     auto mix_hash = to_hash256(str_mix_hash);
@@ -506,21 +507,17 @@ bool light_verify(const epoch_context& context, const char* str_header_hash,
     // Check epoch number and context
 
     const auto result = hash(context, (int) nHeight, header_hash, nNonce);
-    std::string share_met = "false";
-    std::string block_met = "false";
-    std::string mix_match = "false";
     if (result.mix_hash == mix_hash) {
-        mix_match = "true";
+        mix_match = true;
     }
 
     if (ethash::is_less_or_equal(result.final_hash, share_boundary)) {
-        share_met = "true";
+        share_met = true;
     }
 
     if (ethash::is_less_or_equal(result.final_hash, block_boundary)) {
-        block_met = "true";
+        block_met = true;
     }
-    return true;
 }
 
 search_result search_light(const epoch_context& context, int block_number,

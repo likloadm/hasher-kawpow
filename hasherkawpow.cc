@@ -102,18 +102,22 @@ NAN_METHOD(light_verify) {
 
         const auto epoch_number = ethash::get_epoch_number(block_height);
 
+        bool share_met = false;
+        bool block_met = false;
+        bool mix_match = false;
+
         if (!context || context->epoch_number != epoch_number)
             context = ethash::create_epoch_context(epoch_number);
 
-        bool is_valid = progpow::light_verify(*context, header_hash_ptr, mix_out_ptr, nonce64_ptr, block_height_str,
-                                                share_boundary_str, block_boundary_str);
-
-        if (is_valid) {
-           info.GetReturnValue().Set(Nan::True());
-        }
-        else {
-           info.GetReturnValue().Set(Nan::False());
-        }
+        bool is_valid = progpow::light_verify(*context, header_hash_ptr,
+                                              mix_out_ptr, nonce64_ptr, block_height_str,
+                                              share_boundary_str, block_boundary_str
+                                              share_met, block_met, mix_match);
+        bool ResultData[3];
+        ResultData[0] = share_met;
+        ResultData[1] = block_met;
+        ResultData[2] = mix_match;
+        info.GetReturnValue().Set(New<v8::Array>(ResultData));
 }
 
 NAN_MODULE_INIT(init) {
