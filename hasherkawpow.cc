@@ -102,10 +102,6 @@ NAN_METHOD(light_verify) {
 
         const auto epoch_number = ethash::get_epoch_number(block_height);
 
-        bool share_met = false;
-        bool block_met = false;
-        bool mix_match = false;
-
         if (!context || context->epoch_number != epoch_number)
             context = ethash::create_epoch_context(epoch_number);
 
@@ -113,7 +109,7 @@ NAN_METHOD(light_verify) {
                               mix_out_ptr, nonce64_ptr, block_height_str,
                               share_boundary_str, block_boundary_str);
 
-        info.GetReturnValue().Set(result);
+        info.GetReturnValue().Set(Nan::New<v8::StringObject>(Nan::New(result).ToLocalChecked())););
 }
 
 NAN_MODULE_INIT(init) {
